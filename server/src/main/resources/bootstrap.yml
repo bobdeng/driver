@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: server
+---
+spring:
+  profiles: dev
+  cloud:
+    config:
+      uri: http://localhost:9000/config
+      name: server
+---
+spring:
+  profiles: release,test
+  cloud:
+    config:
+      uri: http://config.local
+      name: server

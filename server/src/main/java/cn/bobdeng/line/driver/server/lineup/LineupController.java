@@ -1,5 +1,6 @@
 package cn.bobdeng.line.driver.server.lineup;
 
+import cn.bobdeng.line.userclient.UserDTO;
 import com.tucodec.rest.CommonResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,30 +12,25 @@ import java.util.List;
 public class LineupController {
     /**
      * 列出可以排队的单位
-     * @return
      */
     @GetMapping("/list_org")
-    public CommonResponse<List<OrgVO>> listOrg(){
+    public CommonResponse<List<OrgVO>> listOrg(@ModelAttribute("user")UserDTO user){
         return null;
     }
 
     /**
      * 列出正在排队的列表
-     * @param orgId
-     * @return
      */
     @GetMapping("/list_queue/{id}")
-    public CommonResponse<List<QueueVO>> listQueue(@PathVariable("id")int orgId){
+    public CommonResponse<List<QueueVO>> listQueue(@ModelAttribute("user")UserDTO user,@PathVariable("id")int orgId){
         return null;
     }
 
     /**
      * 入队
-     * @param orgId
-     * @return
      */
     @PostMapping("/enqueue/{id}")
-    public CommonResponse enqueue(@PathVariable("id")int orgId, @RequestBody @Valid EnqueueForm enqueueForm){
+    public CommonResponse enqueue(@ModelAttribute("user")UserDTO user,@PathVariable("id")int orgId, @RequestBody @Valid EnqueueForm enqueueForm){
         return null;
     }
 

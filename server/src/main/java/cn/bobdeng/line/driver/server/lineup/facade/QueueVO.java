@@ -15,4 +15,5 @@ public class QueueVO {
     private String number;
     private String internalNumber;
     private String mobile;
+    private long beginTime;
 }

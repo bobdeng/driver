@@ -79,6 +79,7 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
                 .number(enqueueForm.getNumber())
                 .name(enqueueForm.getName())
                 .mobile(enqueueForm.getMobile())
+                .beginTime(System.currentTimeMillis())
                 .build();
         int before = queueService.joinQueue(queue);
         return EnQueueResult.builder().before(before).queue(queueToVO(queue)).build();

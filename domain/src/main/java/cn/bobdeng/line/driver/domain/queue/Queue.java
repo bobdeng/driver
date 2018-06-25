@@ -17,4 +17,5 @@ public class Queue {
     private String number;
     private String internalNumber;
     private String mobile;
+    private long beginTime;
 }

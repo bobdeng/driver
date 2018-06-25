@@ -15,6 +15,12 @@ public class QueueServiceImpl implements QueueService {
         try {
             List<Queue> queues = queueRepository.getOrgQueue(queue.getOrgId());
             if (queues == null) queues = new ArrayList<>();
+            queues.stream()
+                    .filter(queue1 -> queue1.getUserId()==queue.getUserId())
+                    .findFirst()
+                    .ifPresent(queue1 -> {
+                        throw new RuntimeException("不允许重复取号");
+                    });
             int maxOrder = queues.stream().mapToInt(Queue::getOrderNumber)
                     .max()
                     .orElse(0);

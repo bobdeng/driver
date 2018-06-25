@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -17,6 +18,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class QueueServiceImplTest {
     public static final int ORG_ID = 1;
+    public static final int USER_ID = 1;
     @InjectMocks
     QueueServiceImpl queueService = new QueueServiceImpl();
     @Mock
@@ -45,7 +47,15 @@ public class QueueServiceImplTest {
         List<Queue> queues = IntStream.range(0, 10).mapToObj(i -> Queue.builder().orderNumber(i).build())
                 .collect(Collectors.toList());
         when(queueRepository.getOrgQueue(ORG_ID)).thenReturn(queues);
-        Queue queue = Queue.builder().orgId(ORG_ID).build();
+        Queue queue = Queue.builder().orgId(ORG_ID).userId(USER_ID).build();
+        int before = queueService.joinQueue(queue);
+        assertEquals(before, 10);
+        assertEquals(queue.getOrderNumber(), 10);
+    }
+    @Test(expected = RuntimeException.class)
+    public void joinQueue_not_repeat() {
+        when(queueRepository.getOrgQueue(ORG_ID)).thenReturn(Arrays.asList(Queue.builder().userId(USER_ID).build()));
+        Queue queue = Queue.builder().orgId(ORG_ID).userId(USER_ID).build();
         int before = queueService.joinQueue(queue);
         assertEquals(before, 10);
         assertEquals(queue.getOrderNumber(), 10);

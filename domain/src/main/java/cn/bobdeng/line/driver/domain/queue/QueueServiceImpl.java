@@ -15,10 +15,10 @@ public class QueueServiceImpl implements QueueService {
         try {
             List<Queue> queues = queueRepository.getOrgQueue(queue.getOrgId());
             if (queues == null) queues = new ArrayList<>();
-            int maxOrder = queues.stream().mapToInt(Queue::getOrder)
+            int maxOrder = queues.stream().mapToInt(Queue::getOrderNumber)
                     .max()
                     .orElse(0);
-            queue.setOrder(maxOrder + 1);
+            queue.setOrderNumber(maxOrder + 1);
             queueRepository.createQueue(queue);
             return queues.size();
         } finally {

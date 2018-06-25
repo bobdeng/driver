@@ -2,10 +2,15 @@ package cn.bobdeng.line.driver.server.lineup.facade;
 
 import cn.bobdeng.line.driver.domain.org.Orgnization;
 import cn.bobdeng.line.driver.domain.org.OrgnizationRepository;
+import cn.bobdeng.line.driver.domain.queue.Queue;
+import cn.bobdeng.line.driver.domain.queue.QueueRepository;
+import cn.bobdeng.line.driver.domain.queue.QueueService;
+import cn.bobdeng.line.userclient.UserDTO;
+import com.tucodec.utils.BeanCopier;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +18,10 @@ import java.util.stream.Collectors;
 public class LineupServiceFacadeImpl implements LineupServiceFacade {
     @Autowired
     OrgnizationRepository orgnizationRepository;
+    @Autowired
+    QueueService queueService;
+    @Autowired
+    QueueRepository queueRepository;
 
     @Override
     public List<OrgVO> findOrgs(String mobile) {
@@ -40,5 +49,38 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
 
         }
         return Location.builder().build();
+    }
+
+    @Override
+    public List<QueueVO> listQueue(int orgId) {
+        return queueRepository.getOrgQueue(orgId)
+                .stream()
+                .map(this::queueToVO)
+                .collect(Collectors.toList());
+    }
+
+    private QueueVO queueToVO(Queue queue) {
+        QueueVO queueVO = new QueueVO();
+        BeanUtils.copyProperties(queue,queueVO);
+        queueVO.setMobile(encryptMobile(queueVO.getMobile()));
+        return queueVO;
+    }
+
+    private String encryptMobile(String mobile) {
+        return mobile.substring(0, 3) + "****" + mobile.substring(mobile.length() - 4);
+    }
+
+    @Override
+    public EnQueueResult enqueue(UserDTO user, int orgId, EnqueueForm enqueueForm) {
+        Queue queue = Queue.builder()
+                .orgId(orgId)
+                .userId(user.getId())
+                .internalNumber(enqueueForm.getInternalNumber())
+                .number(enqueueForm.getNumber())
+                .name(enqueueForm.getName())
+                .mobile(enqueueForm.getMobile())
+                .build();
+        int before = queueService.joinQueue(queue);
+        return EnQueueResult.builder().before(before).queue(queueToVO(queue)).build();
     }
 }

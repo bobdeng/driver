@@ -1,4 +1,4 @@
-package cn.bobdeng.line.driver.server.lineup.facade;
+package cn.bobdeng.line.driver.server.lineup;
 
 import cn.bobdeng.line.db.OrgnizationDO;
 import cn.bobdeng.line.driver.domain.org.Orgnization;

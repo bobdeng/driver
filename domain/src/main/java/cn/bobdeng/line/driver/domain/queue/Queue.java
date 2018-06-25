@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Queue {
-    private int order;
+    private int orderNumber;
     private int orgId;
+    private int userId;
     private String name;
     private String number;
     private String internalNumber;

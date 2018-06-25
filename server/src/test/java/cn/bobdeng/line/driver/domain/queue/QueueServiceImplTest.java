@@ -28,7 +28,7 @@ public class QueueServiceImplTest {
         Queue queue = Queue.builder().orgId(ORG_ID).build();
         int before = queueService.joinQueue(queue);
         assertEquals(before, 0);
-        assertEquals(queue.getOrder(), 1);
+        assertEquals(queue.getOrderNumber(), 1);
     }
 
     @Test
@@ -37,17 +37,17 @@ public class QueueServiceImplTest {
         Queue queue = Queue.builder().orgId(ORG_ID).build();
         int before = queueService.joinQueue(queue);
         assertEquals(before, 0);
-        assertEquals(queue.getOrder(), 1);
+        assertEquals(queue.getOrderNumber(), 1);
     }
 
     @Test
     public void joinQueue_not_empty() {
-        List<Queue> queues = IntStream.range(0, 10).mapToObj(i -> Queue.builder().order(i).build())
+        List<Queue> queues = IntStream.range(0, 10).mapToObj(i -> Queue.builder().orderNumber(i).build())
                 .collect(Collectors.toList());
         when(queueRepository.getOrgQueue(ORG_ID)).thenReturn(queues);
         Queue queue = Queue.builder().orgId(ORG_ID).build();
         int before = queueService.joinQueue(queue);
         assertEquals(before, 10);
-        assertEquals(queue.getOrder(), 10);
+        assertEquals(queue.getOrderNumber(), 10);
     }
 }

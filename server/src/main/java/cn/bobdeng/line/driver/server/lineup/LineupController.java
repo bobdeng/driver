@@ -1,7 +1,12 @@
 package cn.bobdeng.line.driver.server.lineup;
 
+import cn.bobdeng.line.driver.server.lineup.facade.EnqueueForm;
+import cn.bobdeng.line.driver.server.lineup.facade.LineupServiceFacade;
+import cn.bobdeng.line.driver.server.lineup.facade.OrgVO;
+import cn.bobdeng.line.driver.server.lineup.facade.QueueVO;
 import cn.bobdeng.line.userclient.UserDTO;
 import com.tucodec.rest.CommonResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -10,19 +15,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/lineup")
 public class LineupController {
+    @Autowired
+    LineupServiceFacade lineupServiceFacade;
     /**
      * 列出可以排队的单位
      */
     @GetMapping("/list_org")
-    public CommonResponse<List<OrgVO>> listOrg(@ModelAttribute("user")UserDTO user){
-        return null;
+    public CommonResponse<List<OrgVO>> listOrg(@RequestAttribute("user")UserDTO user){
+        return CommonResponse.getSuccess(lineupServiceFacade.findOrgs(user.getMobile()));
     }
 
     /**
      * 列出正在排队的列表
      */
     @GetMapping("/list_queue/{id}")
-    public CommonResponse<List<QueueVO>> listQueue(@ModelAttribute("user")UserDTO user,@PathVariable("id")int orgId){
+    public CommonResponse<List<QueueVO>> listQueue(@RequestAttribute("user")UserDTO user, @PathVariable("id")int orgId){
         return null;
     }
 
@@ -30,7 +37,7 @@ public class LineupController {
      * 入队
      */
     @PostMapping("/enqueue/{id}")
-    public CommonResponse enqueue(@ModelAttribute("user")UserDTO user,@PathVariable("id")int orgId, @RequestBody @Valid EnqueueForm enqueueForm){
+    public CommonResponse enqueue(@RequestAttribute("user")UserDTO user,@PathVariable("id")int orgId, @RequestBody @Valid EnqueueForm enqueueForm){
         return null;
     }
 

@@ -1,4 +1,4 @@
-package cn.bobdeng.line.driver.server.lineup;
+package cn.bobdeng.line.driver.server.lineup.facade;
 
 import lombok.Data;
 

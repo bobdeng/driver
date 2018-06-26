@@ -5,4 +5,6 @@ import java.util.stream.Stream;
 
 public interface OrgnizationRepository {
     Stream<Orgnization> findByDriver(String mobile);
+
+    Stream<Business> listBusiness(int orgId);
 }

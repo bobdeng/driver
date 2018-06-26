@@ -10,4 +10,6 @@ public interface LineupServiceFacade {
     List<QueueVO> listQueue(int orgId);
 
     EnQueueResult enqueue(UserDTO user, int orgId, EnqueueForm enqueueForm);
+
+    List<BusinessVO> listBusiness(int orgId);
 }

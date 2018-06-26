@@ -6,7 +6,6 @@ import cn.bobdeng.line.driver.domain.queue.Queue;
 import cn.bobdeng.line.driver.domain.queue.QueueRepository;
 import cn.bobdeng.line.driver.domain.queue.QueueService;
 import cn.bobdeng.line.userclient.UserDTO;
-import com.tucodec.utils.BeanCopier;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,7 +60,7 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
 
     private QueueVO queueToVO(Queue queue) {
         QueueVO queueVO = new QueueVO();
-        BeanUtils.copyProperties(queue,queueVO);
+        BeanUtils.copyProperties(queue, queueVO);
         queueVO.setMobile(encryptMobile(queueVO.getMobile()));
         return queueVO;
     }
@@ -83,5 +82,15 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
                 .build();
         int before = queueService.joinQueue(queue);
         return EnQueueResult.builder().before(before).queue(queueToVO(queue)).build();
+    }
+
+    @Override
+    public List<BusinessVO> listBusiness(int orgId) {
+        return orgnizationRepository.listBusiness(orgId)
+                .map(business -> BusinessVO.builder()
+                        .id(business.getId())
+                        .name(business.getName())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

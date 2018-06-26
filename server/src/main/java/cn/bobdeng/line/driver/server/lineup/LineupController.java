@@ -32,6 +32,14 @@ public class LineupController {
     }
 
     /**
+     * 列出可办理的业务
+     */
+    @GetMapping("/list_business")
+    public CommonResponse<List<BusinessVO>> listBusiness(@RequestAttribute("user") UserDTO user, @PathVariable("id") int orgId) {
+        return CommonResponse.getSuccess(lineupServiceFacade.listBusiness(orgId));
+    }
+
+    /**
      * 入队
      */
     @PostMapping("/enqueue/{id}")

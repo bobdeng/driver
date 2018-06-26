@@ -34,7 +34,7 @@ public class LineupController {
     /**
      * 列出可办理的业务
      */
-    @GetMapping("/list_business")
+    @GetMapping("/list_business/{id}")
     public CommonResponse<List<BusinessVO>> listBusiness(@RequestAttribute("user") UserDTO user, @PathVariable("id") int orgId) {
         return CommonResponse.getSuccess(lineupServiceFacade.listBusiness(orgId));
     }

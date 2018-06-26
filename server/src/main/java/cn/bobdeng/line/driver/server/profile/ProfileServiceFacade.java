@@ -6,4 +6,6 @@ public interface ProfileServiceFacade {
     void setUserName(UserDTO user, SetProfileForm setProfileForm);
 
     void setUserPush(UserDTO user, SetPushForm setPushForm);
+
+    void setUserPass(UserDTO user, SetPasswordForm setPasswordForm);
 }

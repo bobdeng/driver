@@ -13,18 +13,27 @@ import javax.validation.Valid;
 public class ProfileController {
     @Autowired
     ProfileServiceFacade profileServiceFacade;
+
     @GetMapping("/show")
-    public CommonResponse showProfile(@RequestAttribute("user")UserDTO user){
+    public CommonResponse showProfile(@RequestAttribute("user") UserDTO user) {
         return CommonResponse.getSuccess(user);
     }
+
     @PostMapping("/set_name")
-    public CommonResponse setName(@RequestBody @Valid SetProfileForm setProfileForm, @RequestAttribute("user")UserDTO user, BindingResult bindingResult){
-        profileServiceFacade.setUserName(user,setProfileForm);
+    public CommonResponse setName(@RequestBody @Valid SetProfileForm setProfileForm, @RequestAttribute("user") UserDTO user, BindingResult bindingResult) {
+        profileServiceFacade.setUserName(user, setProfileForm);
         return CommonResponse.getSuccess();
     }
+
     @PostMapping("/set_push")
-    public CommonResponse setPush(@RequestBody @Valid SetPushForm setPushForm, @RequestAttribute("user")UserDTO user, BindingResult bindingResult){
-        profileServiceFacade.setUserPush(user,setPushForm);
+    public CommonResponse setPush(@RequestBody @Valid SetPushForm setPushForm, @RequestAttribute("user") UserDTO user, BindingResult bindingResult) {
+        profileServiceFacade.setUserPush(user, setPushForm);
+        return CommonResponse.getSuccess();
+    }
+
+    @PostMapping("/set_pass")
+    public CommonResponse setPass(@RequestBody @Valid SetPasswordForm setPasswordForm, @RequestAttribute("user") UserDTO user, BindingResult bindingResult) {
+        profileServiceFacade.setUserPass(user, setPasswordForm);
         return CommonResponse.getSuccess();
     }
 }

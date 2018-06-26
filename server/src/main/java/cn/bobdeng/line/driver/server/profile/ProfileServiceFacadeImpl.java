@@ -1,5 +1,6 @@
 package cn.bobdeng.line.driver.server.profile;
 
+import cn.bobdeng.line.userclient.ChangePassForm;
 import cn.bobdeng.line.userclient.SetNameForm;
 import cn.bobdeng.line.userclient.UserClient;
 import cn.bobdeng.line.userclient.UserDTO;
@@ -21,9 +22,18 @@ public class ProfileServiceFacadeImpl implements ProfileServiceFacade {
 
     @Override
     public void setUserPush(UserDTO user, SetPushForm setPushForm) {
-        cn.bobdeng.line.userclient.SetPushForm form=new cn.bobdeng.line.userclient.SetPushForm();
+        cn.bobdeng.line.userclient.SetPushForm form = new cn.bobdeng.line.userclient.SetPushForm();
         form.setUserId(user.getId());
-        form.setTokenPush(setPushForm.getType()+":"+setPushForm.getToken());
+        form.setTokenPush(setPushForm.getType() + ":" + setPushForm.getToken());
         userClient.setPush(form);
+    }
+
+    @Override
+    public void setUserPass(UserDTO user, SetPasswordForm setPasswordForm) {
+        userClient.setPassword(ChangePassForm.builder()
+                .userId(user.getId())
+                .newPass(setPasswordForm.getPassword())
+                .oldPass(setPasswordForm.getOlePass())
+                .build());
     }
 }

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class Queue {
     private int orderNumber;
     private int orgId;
+    private int businessId;
     private int userId;
     private String name;
     private String number;

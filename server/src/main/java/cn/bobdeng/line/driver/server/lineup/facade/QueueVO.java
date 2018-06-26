@@ -16,4 +16,6 @@ public class QueueVO {
     private String internalNumber;
     private String mobile;
     private long beginTime;
+    private int businessId;
+    private String business;
 }

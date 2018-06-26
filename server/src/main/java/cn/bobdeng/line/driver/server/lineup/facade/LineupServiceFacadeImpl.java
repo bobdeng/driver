@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,9 +53,12 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
 
     @Override
     public List<QueueVO> listQueue(int orgId) {
+        Map<Integer, String> businessMap = orgnizationRepository.listBusiness(orgId)
+                .collect(Collectors.toMap(business -> business.getId(), b -> b.getName()));
         return queueRepository.getOrgQueue(orgId)
                 .stream()
                 .map(this::queueToVO)
+                .peek(queueVO -> queueVO.setBusiness(businessMap.getOrDefault(queueVO.getBusinessId(),"无")))
                 .collect(Collectors.toList());
     }
 

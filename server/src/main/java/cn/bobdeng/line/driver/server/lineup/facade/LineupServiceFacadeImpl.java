@@ -63,6 +63,7 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
                     .stream()
                     .map(this::queueToVO)
                     .peek(queueVO -> queueVO.setBusiness(businessMap.getOrDefault(queueVO.getBusinessId(), "无")))
+                    .peek(queueVO -> queueVO.setCounterName(queueRepository.findCounterById(queueVO.getCounterId())))
                     .collect(Collectors.toList());
         }).getValue();
 

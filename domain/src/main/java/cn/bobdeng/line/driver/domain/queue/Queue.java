@@ -14,6 +14,7 @@ public class Queue {
     private int orgId;
     private int businessId;
     private int userId;
+    private int counterId;
     private String name;
     private String number;
     private String internalNumber;

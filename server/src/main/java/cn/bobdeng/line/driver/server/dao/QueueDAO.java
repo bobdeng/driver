@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface QueueDAO extends CrudRepository<QueueDO,Integer> {
-    @Query("select a from QueueDO a where a.orgId=:orgId and a.counterId=0")
+    @Query("select a from QueueDO a where a.orgId=:orgId")
     List<QueueDO> findByOrgId(@Param("orgId") int orgId);
 }

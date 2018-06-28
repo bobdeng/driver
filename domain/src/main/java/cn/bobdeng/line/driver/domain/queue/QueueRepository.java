@@ -14,4 +14,6 @@ public interface QueueRepository {
     Long getLastQueueUpdate(String key);
 
     void getAndIncLastUpdate(String key);
+
+    String findCounterById(int counterId);
 }

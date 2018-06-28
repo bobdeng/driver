@@ -10,4 +10,8 @@ public interface QueueRepository {
     void unlockQueue(int orgId);
 
     void createQueue(Queue queue);
+
+    Long getLastQueueUpdate(String key);
+
+    void getAndIncLastUpdate(String key);
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -44,5 +45,11 @@ public class OrgRepositotyJpaImpl implements OrgnizationRepository {
                         .id(businessDO.getId())
                         .name(businessDO.getName())
                         .build());
+    }
+
+    @Override
+    public Optional<Orgnization> findById(int orgId) {
+        return Optional.ofNullable(orgnizationDAO.findOne(orgId))
+                .map(this::orgDOtoOrgnization);
     }
 }

@@ -4,10 +4,9 @@ import cn.bobdeng.line.db.QueueDO;
 import cn.bobdeng.line.driver.domain.queue.Queue;
 import cn.bobdeng.line.driver.domain.queue.QueueRepository;
 import cn.bobdeng.line.driver.server.dao.QueueDAO;
-import com.tucodec.utils.BeanCopier;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +20,8 @@ public class QueueRepositoryJpaImpl implements QueueRepository {
     @Autowired
     QueueDAO queueDAO;
     @Autowired
-    RedisTemplate<String, String> redisTemplate;
-    private static final String LOCK_QUEUE_PREFIX = "lock_queue_";
+    RedissonClient redissonClient;
+    public static final String QUEUE_LOCK_KEY_PREFIX = "queue_lock_key_prefix_";
 
     @Override
     public List<Queue> getOrgQueue(int orgId) {
@@ -32,30 +31,38 @@ public class QueueRepositoryJpaImpl implements QueueRepository {
     }
 
     private Queue fromDO(QueueDO queueDO) {
-        Queue queue=new Queue();
-        BeanUtils.copyProperties(queueDO,queue);
+        Queue queue = new Queue();
+        BeanUtils.copyProperties(queueDO, queue);
         return queue;
     }
 
     @Override
     public void lockQueue(int orgId) {
-        long start = System.nanoTime();
-        while (!redisTemplate.opsForValue().setIfAbsent(LOCK_QUEUE_PREFIX + orgId, ENQUEUE)) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (System.nanoTime() - start > TIMEOUT) {
-                throw new RuntimeException("lock time out");
-            }
-        }
-        redisTemplate.opsForValue().set(LOCK_QUEUE_PREFIX + orgId, ENQUEUE, 5, TimeUnit.SECONDS);
+        redissonClient.getLock(QUEUE_LOCK_KEY_PREFIX + orgId).lock(1, TimeUnit.MINUTES);
     }
 
     @Override
     public void unlockQueue(int orgId) {
-        redisTemplate.delete(LOCK_QUEUE_PREFIX + orgId);
+        redissonClient.getLock(QUEUE_LOCK_KEY_PREFIX + orgId).unlock();
+    }
+
+    @Override
+    public Long getLastQueueUpdate(String key) {
+        long newest = redissonClient.getAtomicLong(key).get();
+        if (newest == 0) {
+            long lastUpdate = System.currentTimeMillis();
+            if (redissonClient.getAtomicLong(key).compareAndSet(lastUpdate, 0)) {
+                return lastUpdate;
+            } else {
+                return redissonClient.getAtomicLong(key).get();
+            }
+        }
+        return newest;
+    }
+
+    @Override
+    public void getAndIncLastUpdate(String key) {
+        redissonClient.getAtomicLong(key).getAndIncrement();
     }
 
     @Override

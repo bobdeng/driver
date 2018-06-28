@@ -13,5 +13,5 @@ spring:
   profiles: release,test
   cloud:
     config:
-      uri: http://config.local
+      uri: http://config.local/config
       name: server,db,redis

@@ -6,6 +6,7 @@ import cn.bobdeng.line.driver.domain.queue.Queue;
 import cn.bobdeng.line.driver.domain.queue.QueueRepository;
 import cn.bobdeng.line.driver.domain.queue.QueueService;
 import cn.bobdeng.line.userclient.UserDTO;
+import com.tucodec.utils.BeanCopier;
 import com.tucodec.utils.LastUpdateCache;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,5 +111,10 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
                         .name(business.getName())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public DriverVO getDriver(UserDTO user, int orgId) {
+        return BeanCopier.copyFrom(queueRepository.getDriver(user.getMobile(), orgId), DriverVO.class);
     }
 }

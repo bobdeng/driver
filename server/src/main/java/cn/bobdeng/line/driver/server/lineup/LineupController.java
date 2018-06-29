@@ -49,4 +49,12 @@ public class LineupController {
         return CommonResponse.getSuccess(lineupServiceFacade.enqueue(user, orgId, enqueueForm));
     }
 
+    /**
+     * 返回我的个人信息
+     */
+    @GetMapping("/driver")
+    public CommonResponse<DriverVO> getDriver(@RequestAttribute("user") UserDTO user, @PathVariable("id") int orgId) {
+        return CommonResponse.getSuccess(lineupServiceFacade.getDriver(user,orgId));
+    }
+
 }

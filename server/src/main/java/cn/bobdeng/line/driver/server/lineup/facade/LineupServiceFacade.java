@@ -12,4 +12,6 @@ public interface LineupServiceFacade {
     EnQueueResult enqueue(UserDTO user, int orgId, EnqueueForm enqueueForm);
 
     List<BusinessVO> listBusiness(int orgId);
+
+    DriverVO getDriver(UserDTO user, int orgId);
 }

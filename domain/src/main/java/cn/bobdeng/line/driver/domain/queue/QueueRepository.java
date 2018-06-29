@@ -16,4 +16,6 @@ public interface QueueRepository {
     void getAndIncLastUpdate(String key);
 
     String findCounterById(int counterId);
+
+    Driver getDriver(String mobile, int orgId);
 }

@@ -2,10 +2,13 @@ package cn.bobdeng.line.driver.server.lineup;
 
 import cn.bobdeng.line.db.CounterDO;
 import cn.bobdeng.line.db.QueueDO;
+import cn.bobdeng.line.driver.domain.queue.Driver;
 import cn.bobdeng.line.driver.domain.queue.Queue;
 import cn.bobdeng.line.driver.domain.queue.QueueRepository;
 import cn.bobdeng.line.driver.server.dao.CounterDAO;
+import cn.bobdeng.line.driver.server.dao.DriverDAO;
 import cn.bobdeng.line.driver.server.dao.QueueDAO;
+import com.tucodec.utils.BeanCopier;
 import lombok.extern.java.Log;
 import org.redisson.api.RAtomicLong;
 import org.redisson.api.RedissonClient;
@@ -27,6 +30,8 @@ public class QueueRepositoryJpaImpl implements QueueRepository {
     QueueDAO queueDAO;
     @Autowired
     CounterDAO counterDAO;
+    @Autowired
+    DriverDAO driverDAO;
     @Autowired
     RedissonClient redissonClient;
     public static final String QUEUE_LOCK_KEY_PREFIX = "queue_lock_key_prefix_";
@@ -69,15 +74,15 @@ public class QueueRepositoryJpaImpl implements QueueRepository {
     private Long checkAtomAndGet(String key) {
         RAtomicLong keyAtom = redissonClient.getAtomicLong(key);
         long ret = keyAtom.get();
-        if (ret==0) {
+        if (ret == 0) {
             long lastUpdate = System.currentTimeMillis();
-            if (keyAtom.compareAndSet(0,lastUpdate)) {
+            if (keyAtom.compareAndSet(0, lastUpdate)) {
                 return lastUpdate;
-            }else{
+            } else {
                 return keyAtom.get();
             }
         }
-        return  ret;
+        return ret;
     }
 
     @Override
@@ -93,9 +98,16 @@ public class QueueRepositoryJpaImpl implements QueueRepository {
 
     @Override
     public String findCounterById(int counterId) {
-        if(counterId==0) return "";
+        if (counterId == 0) return "";
         return Optional.ofNullable(counterDAO.findOne(counterId))
                 .map(CounterDO::getName)
                 .orElse("");
+    }
+
+    @Override
+    public Driver getDriver(String mobile, int orgId) {
+        return Optional.ofNullable(driverDAO.findByMobileAndOrgId(mobile, orgId))
+                .map(driverDO -> BeanCopier.copyFrom(driverDO, Driver.class))
+                .orElseThrow(() -> new RuntimeException("not found"));
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class VersionControler {
 
-    public static final String KEY_123 = "key2";
     @Value("${build.version}")
     String version;
     @Autowired
@@ -21,7 +20,6 @@ public class VersionControler {
 
     @GetMapping("/version")
     public String version() {
-        System.out.println(redissonClient.getAtomicLong(KEY_123).compareAndSet(0,100));
         return version;
     }
 }

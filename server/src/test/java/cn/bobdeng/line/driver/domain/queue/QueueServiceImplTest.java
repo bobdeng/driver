@@ -59,5 +59,6 @@ public class QueueServiceImplTest {
         int before = queueService.joinQueue(queue);
         assertEquals(before, 10);
         assertEquals(queue.getOrderNumber(), 10);
+        assertEquals(queue.getCounterId(),-1);
     }
 }

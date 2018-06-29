@@ -25,6 +25,7 @@ public class QueueServiceImpl implements QueueService {
                     .max()
                     .orElse(0);
             queue.setOrderNumber(maxOrder + 1);
+            queue.setCounterId(-1);
             queueRepository.createQueue(queue);
             return (int)queues.stream()
                     .filter(q->q.getBusinessId()==queue.getBusinessId())

@@ -9,10 +9,10 @@ import org.springframework.data.repository.query.Param;
 import javax.transaction.Transactional;
 
 public interface MessageDAO extends CrudRepository<MessageDO, Integer> {
-    MessageDO findByIdAndUserId(String id, int userId);
+    MessageDO findByIdAndUserId(int id, int userId);
 
     @Modifying
     @Transactional
     @Query("update MessageDO a set a.verifyTime=:millis where a.id=:id and a.userId=:userId")
-    void updateConfirmTime(@Param("id") String id, @Param("userId") int userId, @Param("millis") long millis);
+    void updateConfirmTime(@Param("id") int id, @Param("userId") int userId, @Param("millis") long millis);
 }

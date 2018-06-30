@@ -12,12 +12,12 @@ public class MessageController {
     MessageServiceFacade messageServiceFacade;
 
     @GetMapping("/{id}")
-    public CommonResponse<MessageVO> getMessage(@PathVariable("id") String id, @RequestAttribute("user") UserDTO user) {
+    public CommonResponse<MessageVO> getMessage(@PathVariable("id") int id, @RequestAttribute("user") UserDTO user) {
         return CommonResponse.getSuccess(messageServiceFacade.getMessage(id, user.getId()));
     }
 
     @PostMapping("/confirm/{id}")
-    public CommonResponse confirmMessage(@PathVariable("id") String id, @RequestAttribute("user") UserDTO user) {
+    public CommonResponse confirmMessage(@PathVariable("id") int id, @RequestAttribute("user") UserDTO user) {
         messageServiceFacade.confirmMessage(id, user.getId());
         return CommonResponse.getSuccess();
     }

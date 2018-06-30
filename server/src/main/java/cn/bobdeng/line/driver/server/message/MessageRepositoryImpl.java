@@ -19,7 +19,7 @@ public class MessageRepositoryImpl implements MessageRepository {
     MessagePoolDAO messagePoolDAO;
 
     @Override
-    public Optional<Message> findByIdAndUserId(String id, int userId) {
+    public Optional<Message> findByIdAndUserId(int id, int userId) {
         return Optional.ofNullable(messageDAO.findByIdAndUserId(id, userId))
                 .map(this::fromDO);
     }
@@ -31,12 +31,12 @@ public class MessageRepositoryImpl implements MessageRepository {
     }
 
     @Override
-    public void updateConfirmTime(String id, int userId, long millis) {
+    public void updateConfirmTime(int id, int userId, long millis) {
         messageDAO.updateConfirmTime(id,userId,millis);
     }
 
     @Override
-    public void removeMessagePool(String id, int userId) {
+    public void removeMessagePool(int id, int userId) {
         messagePoolDAO.deleteByMessageId(id);
     }
 }

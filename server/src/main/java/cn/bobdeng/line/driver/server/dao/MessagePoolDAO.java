@@ -12,5 +12,5 @@ public interface MessagePoolDAO extends CrudRepository<MessagePoolDO,Integer> {
     @Modifying
     @Query("delete from MessagePoolDO a where a.messageId=:id")
     @Transactional
-    void deleteByMessageId(@Param("id") String id);
+    void deleteByMessageId(@Param("id") int id);
 }

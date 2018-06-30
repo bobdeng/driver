@@ -6,7 +6,7 @@ import lombok.Setter;
 public class MessageServiceImpl implements MessageService {
     MessageRepository messageRepository;
     @Override
-    public void confirmMessage(String id, int userId) {
+    public void confirmMessage(int id, int userId) {
         messageRepository.updateConfirmTime(id,userId,System.currentTimeMillis());
         messageRepository.removeMessagePool(id,userId);
     }

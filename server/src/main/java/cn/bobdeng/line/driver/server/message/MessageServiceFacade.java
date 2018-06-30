@@ -1,7 +1,7 @@
 package cn.bobdeng.line.driver.server.message;
 
 public interface MessageServiceFacade {
-    MessageVO getMessage(String id, int userId);
+    MessageVO getMessage(int id, int userId);
 
-    void confirmMessage(String id, int userId);
+    void confirmMessage(int id, int userId);
 }

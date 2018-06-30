@@ -18,7 +18,7 @@ public class MessageServiceFacadeImpl implements MessageServiceFacade {
     OrgnizationRepository orgnizationRepository;
 
     @Override
-    public MessageVO getMessage(String id, int userId) {
+    public MessageVO getMessage(int id, int userId) {
         return messageRepository.findByIdAndUserId(id, userId)
                 .map(message -> toVO(message))
                 .orElseThrow(() -> new RuntimeException("not found"));
@@ -34,7 +34,7 @@ public class MessageServiceFacadeImpl implements MessageServiceFacade {
     }
 
     @Override
-    public void confirmMessage(String id, int userId) {
+    public void confirmMessage(int id, int userId) {
         messageService.confirmMessage(id, userId);
     }
 }

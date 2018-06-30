@@ -52,7 +52,7 @@ public class LineupController {
     /**
      * 返回我的个人信息
      */
-    @GetMapping("/driver")
+    @GetMapping("/driver/{id}")
     public CommonResponse<DriverVO> getDriver(@RequestAttribute("user") UserDTO user, @PathVariable("id") int orgId) {
         return CommonResponse.getSuccess(lineupServiceFacade.getDriver(user,orgId));
     }

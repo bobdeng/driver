@@ -28,7 +28,7 @@ public class LineupController {
      */
     @GetMapping("/list_queue/{id}")
     public CommonResponse<List<QueueVO>> listQueue(@RequestAttribute("user") UserDTO user, @PathVariable("id") int orgId) {
-        return CommonResponse.getSuccess(lineupServiceFacade.listQueue(orgId));
+        return CommonResponse.getSuccess(lineupServiceFacade.listQueue(user,orgId));
     }
 
     /**

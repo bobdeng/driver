@@ -7,7 +7,7 @@ import java.util.List;
 public interface LineupServiceFacade {
     List<OrgVO> findOrgs(String mobile);
 
-    List<QueueVO> listQueue(int orgId);
+    List<QueueVO> listQueue(UserDTO user,int orgId);
 
     EnQueueResult enqueue(UserDTO user, int orgId, EnqueueForm enqueueForm);
 

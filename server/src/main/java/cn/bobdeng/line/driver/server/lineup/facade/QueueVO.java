@@ -20,4 +20,6 @@ public class QueueVO {
     private long beginTime;
     private int businessId;
     private String business;
+    private boolean me;
+    private int userId;
 }

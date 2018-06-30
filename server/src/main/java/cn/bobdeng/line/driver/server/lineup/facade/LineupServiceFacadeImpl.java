@@ -56,13 +56,14 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
     }
 
     @Override
-    public List<QueueVO> listQueue(int orgId) {
+    public List<QueueVO> listQueue(UserDTO user,int orgId) {
         return queueCache.getValue(String.valueOf(orgId), () -> queueRepository.getLastQueueUpdate(QUEUE_LAST_UPDATE_PREFIX + orgId), () -> {
             Map<Integer, String> businessMap = orgnizationRepository.listBusiness(orgId)
                     .collect(Collectors.toMap(business -> business.getId(), b -> b.getName()));
             return queueRepository.getOrgQueue(orgId)
                     .stream()
                     .map(this::queueToVO)
+                    .peek(queueVO -> queueVO.setMe(queueVO.getUserId()==user.getId()))
                     .peek(queueVO -> queueVO.setBusiness(businessMap.getOrDefault(queueVO.getBusinessId(), "无")))
                     .peek(queueVO -> queueVO.setCounterName(queueRepository.findCounterById(queueVO.getCounterId())))
                     .collect(Collectors.toList());

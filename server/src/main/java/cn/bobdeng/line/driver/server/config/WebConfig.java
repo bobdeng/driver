@@ -14,6 +14,7 @@ public class WebConfig {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(loginFilter);
         registration.addUrlPatterns("/lineup/*");
+        registration.addUrlPatterns("/message/*");
         registration.setName("testFilter");
         registration.setOrder(1);
         return registration;

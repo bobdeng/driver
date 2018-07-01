@@ -1,4 +1,4 @@
-package cn.bobdeng.line.driver.domain.queue;
+package cn.bobdeng.line.driver.domain.driver;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,9 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Driver {
     private int id;
     private String name;

@@ -1,6 +1,5 @@
 package cn.bobdeng.line.driver.server.controller;
 
-import cn.bobdeng.line.driver.domain.queue.QueueRepository;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

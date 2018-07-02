@@ -1,7 +1,6 @@
 package cn.bobdeng.line.driver.server.dao;
 
 import cn.bobdeng.line.db.QueueDO;
-import cn.bobdeng.line.driver.domain.queue.Queue;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

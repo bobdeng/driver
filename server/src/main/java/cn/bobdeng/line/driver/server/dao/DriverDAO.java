@@ -1,7 +1,6 @@
 package cn.bobdeng.line.driver.server.dao;
 
 import cn.bobdeng.line.db.DriverDO;
-import cn.bobdeng.line.driver.domain.queue.Driver;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

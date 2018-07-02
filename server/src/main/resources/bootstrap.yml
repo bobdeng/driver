@@ -10,8 +10,15 @@ spring:
       name: server,db,redis
 ---
 spring:
-  profiles: release,test
+  profiles: release
   cloud:
     config:
       uri: http://config.local/config
+      name: server,db,redis
+---
+spring:
+  profiles: test
+  cloud:
+    config:
+      uri: http://config-test.local/config
       name: server,db,redis

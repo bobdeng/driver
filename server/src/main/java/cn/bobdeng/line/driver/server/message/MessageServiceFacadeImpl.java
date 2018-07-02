@@ -25,7 +25,7 @@ public class MessageServiceFacadeImpl implements MessageServiceFacade {
     }
 
     private MessageVO toVO(Message message) {
-        MessageVO messageVO = MessageVO.builder().content(message.getContent())
+        MessageVO messageVO = MessageVO.builder().content(message.getFinalContent())
                 .type(message.getType())
                 .createTime(message.getCreateTime())
                 .build();

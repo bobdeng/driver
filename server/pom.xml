@@ -129,9 +129,9 @@
 
     <repositories>
         <repository>
-            <id>tucodec-release</id>
-            <name>tucodec private rep</name>
-            <url>http://120.77.159.189:8081/repository/maven-releases/</url>
+            <id>zxb-releases</id>
+            <name>zxb</name>
+            <url>https://nexus.zhixubao.com/repository/maven-releases/</url>
         </repository>
     </repositories>
 </project>

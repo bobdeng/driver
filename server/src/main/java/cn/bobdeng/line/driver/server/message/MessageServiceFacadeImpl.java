@@ -1,12 +1,14 @@
 package cn.bobdeng.line.driver.server.message;
 
-import cn.bobdeng.line.driver.domain.message.Message;
-import cn.bobdeng.line.driver.domain.message.MessageRepository;
-import cn.bobdeng.line.driver.domain.message.MessageService;
 import cn.bobdeng.line.driver.domain.org.Orgnization;
 import cn.bobdeng.line.driver.domain.org.OrgnizationRepository;
+import cn.bobdeng.line.message.domain.Message;
+import cn.bobdeng.line.message.domain.MessageRepository;
+import cn.bobdeng.line.message.domain.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class MessageServiceFacadeImpl implements MessageServiceFacade {
@@ -19,7 +21,7 @@ public class MessageServiceFacadeImpl implements MessageServiceFacade {
 
     @Override
     public MessageVO getMessage(int id, int userId) {
-        return messageRepository.findByIdAndUserId(id, userId)
+        return Optional.ofNullable(messageService.getMessage(id, userId))
                 .map(message -> toVO(message))
                 .orElseThrow(() -> new RuntimeException("not found"));
     }

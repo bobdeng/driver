@@ -1,8 +1,5 @@
 package cn.bobdeng.line.driver.server.config;
 
-import cn.bobdeng.line.driver.domain.message.MessageRepository;
-import cn.bobdeng.line.driver.domain.message.MessageService;
-import cn.bobdeng.line.driver.domain.message.MessageServiceImpl;
 import cn.bobdeng.line.queue.domain.queue.QueueRepository;
 import cn.bobdeng.line.queue.domain.queue.QueueService;
 import cn.bobdeng.line.queue.domain.queue.QueueServiceImpl;
@@ -42,10 +39,4 @@ public class ServiceConfig {
         return queueService;
     }
 
-    @Bean
-    MessageService messageService(MessageRepository messageRepository) {
-        MessageServiceImpl messageService = new MessageServiceImpl();
-        messageService.setMessageRepository(messageRepository);
-        return messageService;
-    }
 }

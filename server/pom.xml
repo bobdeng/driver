@@ -93,6 +93,21 @@
         <dependency>
             <groupId>cn.bobdeng.line</groupId>
             <artifactId>message</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.bobdeng</groupId>
+            <artifactId>business-server</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.bobdeng.line</groupId>
+            <artifactId>orgnization</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.bobdeng.line</groupId>
+            <artifactId>driverlib</artifactId>
             <version>1.2</version>
         </dependency>
         <dependency>

@@ -1,8 +1,9 @@
 package cn.bobdeng.line.driver.server.lineup.facade;
 
-import cn.bobdeng.line.driver.domain.driver.DriverRepository;
-import cn.bobdeng.line.driver.domain.org.Orgnization;
-import cn.bobdeng.line.driver.domain.org.OrgnizationRepository;
+import cn.bobdeng.line.business.domain.BusinessRepository;
+import cn.bobdeng.line.driver.domain.DriverRepository;
+import cn.bobdeng.line.orgnization.domain.OrgRepository;
+import cn.bobdeng.line.orgnization.domain.Orgnization;
 import cn.bobdeng.line.queue.domain.queue.Queue;
 import cn.bobdeng.line.queue.domain.queue.QueueRepository;
 import cn.bobdeng.line.queue.domain.queue.QueueService;
@@ -19,17 +20,21 @@ import java.util.stream.Collectors;
 @Service
 public class LineupServiceFacadeImpl implements LineupServiceFacade {
     @Autowired
-    OrgnizationRepository orgnizationRepository;
+    OrgRepository orgnizationRepository;
     @Autowired
     QueueService queueService;
     @Autowired
     QueueRepository queueRepository;
     @Autowired
     DriverRepository driverRepository;
+    @Autowired
+    BusinessRepository businessRepository;
 
     @Override
     public List<OrgVO> findOrgs(String mobile) {
-        return orgnizationRepository.findByDriver(mobile)
+        return driverRepository.findDriverByMobile(mobile)
+                .map(driver -> orgnizationRepository.findById(driver.getOrgId()).orElse(null))
+                .filter(orgnization -> orgnization!=null)
                 .map(this::orgToVO).collect(Collectors.toList());
     }
 
@@ -94,7 +99,7 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
 
     @Override
     public List<BusinessVO> listBusiness(int orgId) {
-        return orgnizationRepository.listBusiness(orgId)
+        return businessRepository.listBusiness(orgId)
                 .map(business -> BusinessVO.builder()
                         .id(business.getId())
                         .name(business.getName())
@@ -104,6 +109,6 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
 
     @Override
     public DriverVO getDriver(UserDTO user, int orgId) {
-        return BeanCopier.copyFrom(driverRepository.findByMobileAndOrg(user.getMobile(), orgId), DriverVO.class);
+        return BeanCopier.copyFrom(driverRepository.findDriverByMobile(orgId,user.getMobile()), DriverVO.class);
     }
 }

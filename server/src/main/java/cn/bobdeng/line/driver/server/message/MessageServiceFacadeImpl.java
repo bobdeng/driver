@@ -1,10 +1,10 @@
 package cn.bobdeng.line.driver.server.message;
 
-import cn.bobdeng.line.driver.domain.org.Orgnization;
-import cn.bobdeng.line.driver.domain.org.OrgnizationRepository;
 import cn.bobdeng.line.message.domain.Message;
 import cn.bobdeng.line.message.domain.MessageRepository;
 import cn.bobdeng.line.message.domain.MessageService;
+import cn.bobdeng.line.orgnization.domain.OrgRepository;
+import cn.bobdeng.line.orgnization.domain.Orgnization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ public class MessageServiceFacadeImpl implements MessageServiceFacade {
     @Autowired
     MessageService messageService;
     @Autowired
-    OrgnizationRepository orgnizationRepository;
+    OrgRepository orgnizationRepository;
 
     @Override
     public MessageVO getMessage(int id, int userId) {

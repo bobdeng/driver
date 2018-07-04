@@ -19,7 +19,7 @@ public class QueueVO {
     private String counterName;
     private long beginTime;
     private int businessId;
-    private String business;
+    private String businessName;
     private boolean me;
     private int userId;
 }

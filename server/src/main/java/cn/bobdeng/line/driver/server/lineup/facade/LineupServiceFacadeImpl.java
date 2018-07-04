@@ -66,6 +66,7 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
                 .getQueues()
                 .stream()
                 .map(this::queueToVO)
+                .peek(queueVO -> queueVO.setMe(user.getId()==queueVO.getUserId()))
                 .collect(Collectors.toList());
 
     }

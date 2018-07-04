@@ -28,8 +28,8 @@ public class MessageServiceFacadeImpl implements MessageServiceFacade {
 
     private MessageVO toVO(Message message) {
         MessageVO messageVO = MessageVO.builder().content(message.getFinalContent())
-                .type(message.getType())
                 .createTime(message.getCreateTime())
+                .id(message.getId())
                 .build();
         messageVO.setOrgName(orgnizationRepository.findById(message.getOrgId()).map(Orgnization::getName).orElse(""));
         return messageVO;

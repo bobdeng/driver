@@ -14,5 +14,4 @@ public class MessageVO {
     private String content;
     private String orgName;
     private long createTime;
-    private String type;
 }

@@ -145,6 +145,11 @@
 
     <repositories>
         <repository>
+            <id>zxb-snapshots</id>
+            <name>zxb</name>
+            <url>https://nexus.zhixubao.com/repository/maven-snapshots/</url>
+        </repository>
+        <repository>
             <id>zxb-releases</id>
             <name>zxb</name>
             <url>https://nexus.zhixubao.com/repository/maven-releases/</url>

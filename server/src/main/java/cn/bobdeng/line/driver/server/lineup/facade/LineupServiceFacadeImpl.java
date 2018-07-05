@@ -1,6 +1,7 @@
 package cn.bobdeng.line.driver.server.lineup.facade;
 
 import cn.bobdeng.line.business.domain.BusinessRepository;
+import cn.bobdeng.line.driver.domain.Driver;
 import cn.bobdeng.line.driver.domain.DriverRepository;
 import cn.bobdeng.line.orgnization.domain.OrgRepository;
 import cn.bobdeng.line.orgnization.domain.Orgnization;
@@ -110,6 +111,10 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
 
     @Override
     public DriverVO getDriver(UserDTO user, int orgId) {
-        return BeanCopier.copyFrom(driverRepository.findDriverByMobile(orgId,user.getMobile()).get(), DriverVO.class);
+        Driver driver = driverRepository.findDriverByMobile(orgId, user.getMobile()).get();
+        DriverVO driverVO = BeanCopier.copyFrom(driver, DriverVO.class);
+        driverVO.setNumber(driver.getTruck().getNumber());
+        driverVO.setInternalNumber(driver.getTruck().getInternalNumber());
+        return driverVO;
     }
 }

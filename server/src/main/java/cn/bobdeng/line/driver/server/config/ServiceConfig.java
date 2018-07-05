@@ -1,8 +1,5 @@
 package cn.bobdeng.line.driver.server.config;
 
-import cn.bobdeng.line.queue.domain.queue.QueueRepository;
-import cn.bobdeng.line.queue.domain.queue.QueueService;
-import cn.bobdeng.line.queue.domain.queue.QueueServiceImpl;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
@@ -31,12 +28,6 @@ public class ServiceConfig {
         }
         RedissonClient redisson = Redisson.create(config);
         return redisson;
-    }
-    @Bean
-    QueueService queueService(QueueRepository queueRepository) {
-        QueueServiceImpl queueService = new QueueServiceImpl();
-        queueService.setQueueRepository(queueRepository);
-        return queueService;
     }
 
 }

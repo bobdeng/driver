@@ -110,6 +110,6 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
 
     @Override
     public DriverVO getDriver(UserDTO user, int orgId) {
-        return BeanCopier.copyFrom(driverRepository.findDriverByMobile(orgId,user.getMobile()), DriverVO.class);
+        return BeanCopier.copyFrom(driverRepository.findDriverByMobile(orgId,user.getMobile()).get(), DriverVO.class);
     }
 }

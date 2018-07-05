@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MessageVO {
     private int id;
+    private int orgId;
     private String content;
     private String orgName;
     private long createTime;

@@ -3,6 +3,8 @@ package cn.bobdeng.line.driver.server.lineup.facade;
 import cn.bobdeng.line.business.domain.BusinessRepository;
 import cn.bobdeng.line.driver.domain.Driver;
 import cn.bobdeng.line.driver.domain.DriverRepository;
+import cn.bobdeng.line.driver.domain.Truck;
+import cn.bobdeng.line.driver.domain.TruckRepository;
 import cn.bobdeng.line.orgnization.domain.OrgRepository;
 import cn.bobdeng.line.orgnization.domain.Orgnization;
 import cn.bobdeng.line.queue.domain.queue.Queue;
@@ -10,7 +12,6 @@ import cn.bobdeng.line.queue.domain.queue.QueueRepository;
 import cn.bobdeng.line.queue.domain.queue.QueueService;
 import cn.bobdeng.line.userclient.UserDTO;
 import com.tucodec.utils.BeanCopier;
-import com.tucodec.utils.LastUpdateCache;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,12 +31,14 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
     DriverRepository driverRepository;
     @Autowired
     BusinessRepository businessRepository;
+    @Autowired
+    TruckRepository truckRepository;
 
     @Override
     public List<OrgVO> findOrgs(String mobile) {
         return driverRepository.findDriverByMobile(mobile)
                 .map(driver -> orgnizationRepository.findById(driver.getOrgId()).orElse(null))
-                .filter(orgnization -> orgnization!=null)
+                .filter(orgnization -> orgnization != null)
                 .map(this::orgToVO).collect(Collectors.toList());
     }
 
@@ -67,7 +70,7 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
                 .getQueues()
                 .stream()
                 .map(this::queueToVO)
-                .peek(queueVO -> queueVO.setMe(user.getId()==queueVO.getUserId()))
+                .peek(queueVO -> queueVO.setMe(user.getId() == queueVO.getUserId()))
                 .collect(Collectors.toList());
 
     }
@@ -85,13 +88,14 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
 
     @Override
     public EnQueueResult enqueue(UserDTO user, int orgId, EnqueueForm enqueueForm) {
+        Truck truck = truckRepository.findById(enqueueForm.getTruckId(), orgId).get();
         Queue queue = Queue.builder()
                 .orgId(orgId)
                 .userId(user.getId())
-                .internalNumber(enqueueForm.getInternalNumber())
-                .number(enqueueForm.getNumber())
-                .name(enqueueForm.getName())
-                .mobile(enqueueForm.getMobile())
+                .internalNumber(truck.getInternalNumber())
+                .number(truck.getNumber())
+                .name(user.getName())
+                .mobile(user.getMobile())
                 .businessId(enqueueForm.getBusinessId())
                 .beginTime(System.currentTimeMillis())
                 .build();
@@ -113,8 +117,10 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
     public DriverVO getDriver(UserDTO user, int orgId) {
         Driver driver = driverRepository.findDriverByMobile(orgId, user.getMobile()).get();
         DriverVO driverVO = BeanCopier.copyFrom(driver, DriverVO.class);
-        driverVO.setNumber(driver.getTruck().getNumber());
-        driverVO.setInternalNumber(driver.getTruck().getInternalNumber());
+        List<TruckVO> trucks = driverRepository.getDriverTrucks(driver)
+                .map(truck -> BeanCopier.copyFrom(truck, TruckVO.class))
+                .collect(Collectors.toList());
+        driverVO.setTrucks(trucks);
         return driverVO;
     }
 }

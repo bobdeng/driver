@@ -72,11 +72,6 @@
             <version>1.7</version>
         </dependency>
         <dependency>
-            <groupId>cn.bobdeng.line</groupId>
-            <artifactId>entity</artifactId>
-            <version>2.6</version>
-        </dependency>
-        <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson</artifactId>
             <version>3.7.2</version>
@@ -89,7 +84,7 @@
         <dependency>
             <groupId>cn.bobdeng.line</groupId>
             <artifactId>message</artifactId>
-            <version>1.11</version>
+            <version>1.11-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>cn.bobdeng</groupId>
@@ -104,7 +99,7 @@
         <dependency>
             <groupId>cn.bobdeng.line</groupId>
             <artifactId>driverlib</artifactId>
-            <version>1.2</version>
+            <version>1.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

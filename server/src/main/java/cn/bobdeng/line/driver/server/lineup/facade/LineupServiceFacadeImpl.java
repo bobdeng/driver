@@ -90,6 +90,7 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
     public EnQueueResult enqueue(UserDTO user, int orgId, EnqueueForm enqueueForm) {
         Truck truck = truckRepository.findById(enqueueForm.getTruckId(), orgId).get();
         Driver driver = driverRepository.findDriverByMobile(orgId, user.getMobile()).get();
+
         Queue queue = Queue.builder()
                 .orgId(orgId)
                 .userId(user.getId())

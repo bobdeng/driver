@@ -95,6 +95,7 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
                 .userId(user.getId())
                 .internalNumber(truck.getInternalNumber())
                 .number(truck.getNumber())
+                .operatorId(user.getId())
                 .name(driver.getName())
                 .mobile(user.getMobile())
                 .businessId(enqueueForm.getBusinessId())

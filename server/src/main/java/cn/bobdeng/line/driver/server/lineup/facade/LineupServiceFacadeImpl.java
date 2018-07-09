@@ -89,12 +89,13 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
     @Override
     public EnQueueResult enqueue(UserDTO user, int orgId, EnqueueForm enqueueForm) {
         Truck truck = truckRepository.findById(enqueueForm.getTruckId(), orgId).get();
+        Driver driver = driverRepository.findDriverByMobile(orgId, user.getMobile()).get();
         Queue queue = Queue.builder()
                 .orgId(orgId)
                 .userId(user.getId())
                 .internalNumber(truck.getInternalNumber())
                 .number(truck.getNumber())
-                .name(user.getName())
+                .name(driver.getName())
                 .mobile(user.getMobile())
                 .businessId(enqueueForm.getBusinessId())
                 .beginTime(System.currentTimeMillis())

@@ -82,6 +82,11 @@
             <version>1.9-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>cn.bobdeng</groupId>
+            <artifactId>discompute</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>cn.bobdeng.line</groupId>
             <artifactId>message</artifactId>
             <version>1.11-SNAPSHOT</version>

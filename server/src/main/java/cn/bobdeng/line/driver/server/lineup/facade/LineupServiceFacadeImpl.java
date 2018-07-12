@@ -1,5 +1,6 @@
 package cn.bobdeng.line.driver.server.lineup.facade;
 
+import cn.bobdeng.discomput.lock.Lock;
 import cn.bobdeng.line.business.domain.BusinessRepository;
 import cn.bobdeng.line.driver.domain.Driver;
 import cn.bobdeng.line.driver.domain.DriverRepository;
@@ -66,6 +67,7 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
     }
 
     @Override
+    @Lock(value = "'queue_lock_'.concat(#orgId)",timeout = 60000)
     public List<QueueVO> listQueue(UserDTO user, int orgId) {
         return queueService.getOrgQueue(orgId)
                 .getQueues()
@@ -89,6 +91,7 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
 
     @Override
     @Transactional
+    @Lock(value = "'queue_lock_'.concat(#orgId)",timeout = 60000)
     public EnQueueResult enqueue(UserDTO user, int orgId, EnqueueForm enqueueForm) {
         Truck truck = truckRepository.findById(enqueueForm.getTruckId(), orgId).get();
         Driver driver = driverRepository.findDriverByMobile(orgId, user.getMobile()).get();

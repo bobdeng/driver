@@ -1,5 +1,6 @@
 package cn.bobdeng.line.driver.server.config;
 
+import cn.bobdeng.discomput.lock.LockAspect;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
@@ -29,5 +30,10 @@ public class ServiceConfig {
         RedissonClient redisson = Redisson.create(config);
         return redisson;
     }
+    @Bean
+    LockAspect lockAspect(){
+        return new LockAspect(redisHost,redisPassword,redisPort);
+    }
+
 
 }

@@ -79,7 +79,7 @@
         <dependency>
             <groupId>cn.bobdeng.line.queue</groupId>
             <artifactId>server</artifactId>
-            <version>1.9-SNAPSHOT</version>
+            <version>1.10-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>cn.bobdeng</groupId>
@@ -99,17 +99,17 @@
         <dependency>
             <groupId>cn.bobdeng.line</groupId>
             <artifactId>orgnization</artifactId>
-            <version>1.4-SNAPSHOT</version>
+            <version>1.5-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>cn.bobdeng.line</groupId>
             <artifactId>counter</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>cn.bobdeng.line</groupId>
             <artifactId>driverlib</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>

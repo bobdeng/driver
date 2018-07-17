@@ -17,7 +17,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableFeignClients("cn.bobdeng")
 @ComponentScan("cn.bobdeng")
 @EnableJpaRepositories("cn.bobdeng")
-@EntityScan("cn.bobdeng.line.db")
+@EntityScan("cn.bobdeng")
 public class ServerApplication {
 
     public static void main(String[] args) {

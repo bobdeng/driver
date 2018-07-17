@@ -2,6 +2,7 @@ package cn.bobdeng.line.driver.server.lineup.facade;
 
 import cn.bobdeng.discomput.lock.Lock;
 import cn.bobdeng.line.business.domain.BusinessRepository;
+import cn.bobdeng.line.counter.domain.Counter;
 import cn.bobdeng.line.counter.domain.CounterRepository;
 import cn.bobdeng.line.driver.domain.Driver;
 import cn.bobdeng.line.driver.domain.DriverRepository;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,11 +74,19 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
     @Override
     @Lock(value = "'queue_lock_'.concat(#orgId)", timeout = 60000)
     public List<QueueVO> listQueue(UserDTO user, int orgId) {
+        Map<Integer, String> businesses = businessRepository.listBusiness(orgId)
+                .stream()
+                .collect(Collectors.toMap(cn.bobdeng.line.business.domain.Business::getId, cn.bobdeng.line.business.domain.Business::getName));
+        Map<Integer, String> counters = counterRepository.findCounterByOrg(orgId)
+                .stream()
+                .collect(Collectors.toMap(Counter::getId, Counter::getName));
         return queueService.getOrgQueue(orgId)
                 .getQueues()
                 .stream()
                 .map(this::queueToVO)
                 .peek(queueVO -> queueVO.setMe(user.getId() == queueVO.getUserId()))
+                .peek(queueVO -> queueVO.setCounterName(counters.getOrDefault(queueVO.getCounterId(), "")))
+                .peek(queueVO -> queueVO.setBusinessName(businesses.getOrDefault(queueVO.getBusinessId(), "")))
                 .collect(Collectors.toList());
 
     }
@@ -85,19 +95,7 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
         QueueVO queueVO = new QueueVO();
         BeanUtils.copyProperties(queue, queueVO);
         queueVO.setMobile(encryptMobile(queueVO.getMobile()));
-        setBusinessName(queueVO);
-        setCounterName(queueVO);
         return queueVO;
-    }
-
-    private void setBusinessName(QueueVO queueVO) {
-        businessRepository.findById(queueVO.getBusinessId(), queueVO.getOrgId())
-                .ifPresent(business -> queueVO.setBusinessName(business.getName()));
-    }
-
-    private void setCounterName(QueueVO queueVO) {
-        counterRepository.findCounterById(queueVO.getCounterId())
-                .ifPresent(counter -> queueVO.setCounterName(counter.getName()));
     }
 
     private String encryptMobile(String mobile) {
@@ -129,6 +127,7 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
     @Override
     public List<BusinessVO> listBusiness(int orgId) {
         return businessRepository.listBusiness(orgId)
+                .stream()
                 .map(business -> BusinessVO.builder()
                         .id(business.getId())
                         .name(business.getName())

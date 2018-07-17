@@ -22,4 +22,5 @@ public class QueueVO {
     private String businessName;
     private boolean me;
     private int userId;
+    private int orgId;
 }

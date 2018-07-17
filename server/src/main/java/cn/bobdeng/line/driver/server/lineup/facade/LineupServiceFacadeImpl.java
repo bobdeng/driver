@@ -2,6 +2,7 @@ package cn.bobdeng.line.driver.server.lineup.facade;
 
 import cn.bobdeng.discomput.lock.Lock;
 import cn.bobdeng.line.business.domain.BusinessRepository;
+import cn.bobdeng.line.counter.domain.CounterRepository;
 import cn.bobdeng.line.driver.domain.Driver;
 import cn.bobdeng.line.driver.domain.DriverRepository;
 import cn.bobdeng.line.driver.domain.Truck;
@@ -33,6 +34,8 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
     DriverRepository driverRepository;
     @Autowired
     BusinessRepository businessRepository;
+    @Autowired
+    CounterRepository counterRepository;
     @Autowired
     TruckRepository truckRepository;
 
@@ -67,7 +70,7 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
     }
 
     @Override
-    @Lock(value = "'queue_lock_'.concat(#orgId)",timeout = 60000)
+    @Lock(value = "'queue_lock_'.concat(#orgId)", timeout = 60000)
     public List<QueueVO> listQueue(UserDTO user, int orgId) {
         return queueService.getOrgQueue(orgId)
                 .getQueues()
@@ -82,7 +85,19 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
         QueueVO queueVO = new QueueVO();
         BeanUtils.copyProperties(queue, queueVO);
         queueVO.setMobile(encryptMobile(queueVO.getMobile()));
+        setBusinessName(queueVO);
+        setCounterName(queueVO);
         return queueVO;
+    }
+
+    private void setBusinessName(QueueVO queueVO) {
+        businessRepository.findById(queueVO.getBusinessId(), queueVO.getOrgId())
+                .ifPresent(business -> queueVO.setBusinessName(business.getName()));
+    }
+
+    private void setCounterName(QueueVO queueVO) {
+        counterRepository.findCounterById(queueVO.getCounterId())
+                .ifPresent(counter -> queueVO.setCounterName(counter.getName()));
     }
 
     private String encryptMobile(String mobile) {
@@ -91,7 +106,7 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
 
     @Override
     @Transactional
-    @Lock(value = "'queue_lock_'.concat(#orgId)",timeout = 60000)
+    @Lock(value = "'queue_lock_'.concat(#orgId)", timeout = 60000)
     public EnQueueResult enqueue(UserDTO user, int orgId, EnqueueForm enqueueForm) {
         Truck truck = truckRepository.findById(enqueueForm.getTruckId(), orgId).get();
         Driver driver = driverRepository.findDriverByMobile(orgId, user.getMobile()).get();

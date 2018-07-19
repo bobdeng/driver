@@ -120,8 +120,8 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
                 .businessId(enqueueForm.getBusinessId())
                 .beginTime(System.currentTimeMillis())
                 .build();
-        int before = queueService.join(queue);
-        return EnQueueResult.builder().before(before).queue(queueToVO(queue)).build();
+        queueService.join(queue);
+        return EnQueueResult.builder().before(0).queue(queueToVO(queue)).build();
     }
 
     @Override

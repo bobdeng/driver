@@ -18,6 +18,7 @@ public class QueueVO {
     private int counterId;
     private String counterName;
     private long beginTime;
+    private long predictWaiting;
     private int businessId;
     private String businessName;
     private boolean me;

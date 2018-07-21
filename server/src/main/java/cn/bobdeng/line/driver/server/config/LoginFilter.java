@@ -13,6 +13,7 @@ import java.io.IOException;
 @Setter
 public class LoginFilter implements Filter {
     UserClient userClient;
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 

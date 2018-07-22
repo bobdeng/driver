@@ -14,7 +14,7 @@ public class NumbersController {
     @GetMapping("/list")
     public CommonResponse<List<PhoneNumberVO>> list(){
         return CommonResponse.getSuccess(Arrays.asList(
-                PhoneNumberVO.builder().name("秩序宝通知（勿接）").number("057128854560").build()
+                PhoneNumberVO.builder().name("秩序宝叫号通知（勿接）").number("057128854560").build()
         ));
     }
 }

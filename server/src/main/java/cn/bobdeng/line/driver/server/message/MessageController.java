@@ -4,7 +4,6 @@ import cn.bobdeng.line.userclient.UserDTO;
 import com.tucodec.rest.CommonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import sun.plugin2.message.Message;
 
 import java.util.List;
 

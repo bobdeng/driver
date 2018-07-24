@@ -8,6 +8,8 @@ spring:
     config:
       uri: http://localhost:9000/config
       name: server,db,redis
+server:
+  port: 9006
 ---
 spring:
   profiles: release
@@ -15,6 +17,8 @@ spring:
     config:
       uri: http://config.local/config
       name: server,db,redis
+server:
+  port: 8080
 ---
 spring:
   profiles: test
@@ -22,3 +26,5 @@ spring:
     config:
       uri: http://config-test.local/config
       name: server,db,redis
+server:
+  port: 8080

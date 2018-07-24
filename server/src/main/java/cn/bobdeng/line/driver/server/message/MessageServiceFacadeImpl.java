@@ -8,7 +8,9 @@ import cn.bobdeng.line.orgnization.domain.Orgnization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MessageServiceFacadeImpl implements MessageServiceFacade {
@@ -39,5 +41,13 @@ public class MessageServiceFacadeImpl implements MessageServiceFacade {
     @Override
     public void confirmMessage(int id, int userId) {
         messageService.confirmMessage(id, userId);
+    }
+
+    @Override
+    public List<MessageVO> pullMessage(int userId, long last) {
+        return messageService.pullMessage(userId, last)
+                .stream()
+                .map(this::toVO)
+                .collect(Collectors.toList());
     }
 }

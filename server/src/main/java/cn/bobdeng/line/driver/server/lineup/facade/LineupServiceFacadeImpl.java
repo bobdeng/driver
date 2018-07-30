@@ -106,6 +106,9 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
     @Transactional
     @Lock(value = "'queue_lock_'.concat(#orgId)", timeout = 60000)
     public EnQueueResult enqueue(UserDTO user, int orgId, EnqueueForm enqueueForm) {
+        orgnizationRepository.findById(orgId).ifPresent(orgnization -> {
+            orgnization.checkExpire(() -> new RuntimeException("企业账号已经过期，请联系客服"));
+        });
         Truck truck = truckRepository.findById(enqueueForm.getTruckId(), orgId).get();
         Driver driver = driverRepository.findDriverByMobile(orgId, user.getMobile()).get();
 

@@ -15,5 +15,8 @@ import java.util.List;
 public class DriverVO {
     private String name;
     private String mobile;
+    private boolean allowInput;
+    private boolean allowEmpty;
+    private TruckVO lastTruck;
     private List<TruckVO> trucks;
 }

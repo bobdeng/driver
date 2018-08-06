@@ -6,4 +6,6 @@ import lombok.Data;
 public class EnqueueForm {
     private int businessId;
     private int truckId;
+    private String number;
+    private String internalNumber;
 }

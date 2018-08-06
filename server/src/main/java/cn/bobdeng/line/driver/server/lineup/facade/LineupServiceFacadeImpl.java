@@ -4,16 +4,14 @@ import cn.bobdeng.discomput.lock.Lock;
 import cn.bobdeng.line.business.domain.BusinessRepository;
 import cn.bobdeng.line.counter.domain.Counter;
 import cn.bobdeng.line.counter.domain.CounterRepository;
-import cn.bobdeng.line.driver.domain.Driver;
-import cn.bobdeng.line.driver.domain.DriverRepository;
-import cn.bobdeng.line.driver.domain.Truck;
-import cn.bobdeng.line.driver.domain.TruckRepository;
+import cn.bobdeng.line.driver.domain.*;
 import cn.bobdeng.line.orgnization.domain.OrgRepository;
 import cn.bobdeng.line.orgnization.domain.Orgnization;
 import cn.bobdeng.line.queue.domain.queue.Queue;
 import cn.bobdeng.line.queue.domain.queue.QueueRepository;
 import cn.bobdeng.line.queue.domain.queue.QueueService;
 import cn.bobdeng.line.userclient.UserDTO;
+import com.tucodec.utils.Assert;
 import com.tucodec.utils.BeanCopier;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +32,8 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
     QueueRepository queueRepository;
     @Autowired
     DriverRepository driverRepository;
+    @Autowired
+    DriverService driverService;
     @Autowired
     BusinessRepository businessRepository;
     @Autowired
@@ -106,12 +106,19 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
     @Transactional
     @Lock(value = "'queue_lock_'.concat(#orgId)", timeout = 60000)
     public EnQueueResult enqueue(UserDTO user, int orgId, EnqueueForm enqueueForm) {
-        orgnizationRepository.findById(orgId).ifPresent(orgnization -> {
-            orgnization.checkExpire(() -> new RuntimeException("企业账号已经过期，请联系客服"));
-        });
-        Truck truck = truckRepository.findById(enqueueForm.getTruckId(), orgId).get();
-        Driver driver = driverRepository.findDriverByMobile(orgId, user.getMobile()).get();
+        Orgnization orgnization = orgnizationRepository.findById(orgId).get();
+        orgnization.checkExpire(() -> new RuntimeException("企业账号已经过期，请联系客服"));
 
+        Truck truck = truckRepository.findById(enqueueForm.getTruckId(), orgId).orElse(Truck.builder()
+                .internalNumber(enqueueForm.getInternalNumber())
+                .number(enqueueForm.getNumber())
+                .build());
+        if (!orgnization.getConfig().getDriverConfig().isAllowEmpty()) {
+            Assert.assertNotNull(truck.getNumber(), "必须输入车牌号");
+        }
+        Driver driver = driverRepository.findDriverByMobile(orgId, user.getMobile()).get();
+        driver.setLastTruck(truck);
+        driverService.setDriverTrucks(driver);
         Queue queue = Queue.builder()
                 .orgId(orgId)
                 .userId(user.getId())
@@ -142,10 +149,16 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
     public DriverVO getDriver(UserDTO user, int orgId) {
         Driver driver = driverRepository.findDriverByMobile(orgId, user.getMobile()).get();
         DriverVO driverVO = BeanCopier.copyFrom(driver, DriverVO.class);
+        Orgnization orgnization = orgnizationRepository.findById(orgId).get();
         List<TruckVO> trucks = driverRepository.getDriverTrucks(driver)
                 .map(truck -> BeanCopier.copyFrom(truck, TruckVO.class))
                 .collect(Collectors.toList());
+        if (driver.getLastTruck() != null) {
+            driverVO.setLastTruck(BeanCopier.copyFrom(driver.getLastTruck(), TruckVO.class));
+        }
         driverVO.setTrucks(trucks);
+        driverVO.setAllowEmpty(orgnization.getConfig().getDriverConfig().isAllowEmpty());
+        driverVO.setAllowInput(orgnization.getConfig().getDriverConfig().isAllowInput());
         return driverVO;
     }
 }

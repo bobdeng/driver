@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface TransferFacade {
     void transfer(UserDTO user,int orgId,String mobile);
-    List<DriverVO> getDriversCanTransfer(UserDTO userDTO,int orgId);
+    List<TransferDriverVO> getDriversCanTransfer(UserDTO userDTO,int orgId);
 }

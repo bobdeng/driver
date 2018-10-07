@@ -30,9 +30,9 @@ public class TransferFacadeImpl implements TransferFacade {
     }
 
     @Override
-    public List<DriverVO> getDriversCanTransfer(UserDTO userDTO, int orgId) {
+    public List<TransferDriverVO> getDriversCanTransfer(UserDTO userDTO, int orgId) {
         return driverRepository.searchDriver("", orgId)
-                .map(driver -> DriverVO.builder()
+                .map(driver -> TransferDriverVO.builder()
                         .name(driver.getName())
                         .mobile(driver.getMobile())
                         .build())

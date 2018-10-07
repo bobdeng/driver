@@ -24,8 +24,8 @@ public class TransferController {
     }
 
     @GetMapping("/list_driver/{orgId}")
-    public CommonResponse<List<DriverVO>> getTransferDrivers(@RequestAttribute("user") UserDTO user, @PathVariable("orgId") int orgId) {
-        List<DriverVO> drivers = transferFacade.getDriversCanTransfer(user, orgId);
+    public CommonResponse<List<TransferDriverVO>> getTransferDrivers(@RequestAttribute("user") UserDTO user, @PathVariable("orgId") int orgId) {
+        List<TransferDriverVO> drivers = transferFacade.getDriversCanTransfer(user, orgId);
         return CommonResponse.getSuccess(drivers);
     }
 }

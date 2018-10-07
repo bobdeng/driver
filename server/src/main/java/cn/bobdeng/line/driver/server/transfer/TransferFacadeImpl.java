@@ -6,6 +6,7 @@ import cn.bobdeng.line.driver.domain.DriverRepository;
 import cn.bobdeng.line.driver.server.lineup.facade.DriverVO;
 import cn.bobdeng.line.queue.domain.queue.QueueService;
 import cn.bobdeng.line.userclient.UserDTO;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Log
 public class TransferFacadeImpl implements TransferFacade {
     @Autowired
     QueueService queueService;

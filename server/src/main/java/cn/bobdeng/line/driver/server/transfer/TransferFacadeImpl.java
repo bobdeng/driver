@@ -26,7 +26,7 @@ public class TransferFacadeImpl implements TransferFacade {
                 .orElseThrow(() -> new RuntimeException("没有这个司机"));
         Driver fromDriver = driverRepository.findDriverByMobile(orgId, user.getMobile())
                 .orElseThrow(() -> new RuntimeException("无权限"));
-        queueService.transfer(fromDriver.getId(), targetDriver.getId());
+        queueService.transfer(fromDriver.getId(),orgId, targetDriver.getId());
     }
 
     @Override

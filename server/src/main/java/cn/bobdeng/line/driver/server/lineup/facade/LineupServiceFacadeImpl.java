@@ -131,7 +131,7 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
 
     private void setDriverLastUseTruck(Truck truck, Driver driver) {
         driver.setLastTruck(truck);
-        driverService.setDriverTrucks(driver);
+        driverService.setLastTruck(driver);
     }
 
     private void checkOrgnization(int orgId, Truck truck) {

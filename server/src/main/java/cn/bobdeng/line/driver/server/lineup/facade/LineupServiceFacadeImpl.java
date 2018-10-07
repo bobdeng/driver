@@ -106,32 +106,47 @@ public class LineupServiceFacadeImpl implements LineupServiceFacade {
     @Transactional
     @Lock(value = "'queue_lock_'.concat(#orgId)", timeout = 60000)
     public EnQueueResult enqueue(UserDTO user, int orgId, EnqueueForm enqueueForm) {
+        Truck truck = getTruck(orgId, enqueueForm);
+        checkOrgnization(orgId, truck);
+        Driver driver = driverRepository.findDriverByMobile(orgId, user.getMobile()).get();
+        setDriverLastUseTruck(truck, driver);
+        Queue queue = buildQueue(user, orgId, enqueueForm, truck, driver);
+        queueService.join(queue);
+        return EnQueueResult.builder().before(0).queue(queueToVO(queue)).build();
+    }
+
+    private Queue buildQueue(UserDTO user, int orgId, EnqueueForm enqueueForm, Truck truck, Driver driver) {
+        return Queue.builder()
+                    .orgId(orgId)
+                    .userId(user.getId())
+                    .internalNumber(truck.getInternalNumber())
+                    .number(truck.getNumber())
+                    .operatorId(user.getId())
+                    .name(driver.getName())
+                    .mobile(user.getMobile())
+                    .businessId(enqueueForm.getBusinessId())
+                    .beginTime(System.currentTimeMillis())
+                    .build();
+    }
+
+    private void setDriverLastUseTruck(Truck truck, Driver driver) {
+        driver.setLastTruck(truck);
+        driverService.setDriverTrucks(driver);
+    }
+
+    private void checkOrgnization(int orgId, Truck truck) {
         Orgnization orgnization = orgnizationRepository.findById(orgId).get();
         orgnization.checkExpire(() -> new RuntimeException("企业账号已经过期，请联系客服"));
-
-        Truck truck = truckRepository.findById(enqueueForm.getTruckId(), orgId).orElse(Truck.builder()
-                .internalNumber(enqueueForm.getInternalNumber())
-                .number(enqueueForm.getNumber())
-                .build());
         if (!orgnization.getConfig().getDriverConfig().isAllowEmpty()) {
             Assert.assertNotNull(truck.getNumber(), "必须输入车牌号");
         }
-        Driver driver = driverRepository.findDriverByMobile(orgId, user.getMobile()).get();
-        driver.setLastTruck(truck);
-        driverService.setDriverTrucks(driver);
-        Queue queue = Queue.builder()
-                .orgId(orgId)
-                .userId(user.getId())
-                .internalNumber(truck.getInternalNumber())
-                .number(truck.getNumber())
-                .operatorId(user.getId())
-                .name(driver.getName())
-                .mobile(user.getMobile())
-                .businessId(enqueueForm.getBusinessId())
-                .beginTime(System.currentTimeMillis())
-                .build();
-        queueService.join(queue);
-        return EnQueueResult.builder().before(0).queue(queueToVO(queue)).build();
+    }
+
+    private Truck getTruck(int orgId, EnqueueForm enqueueForm) {
+        return truckRepository.findById(enqueueForm.getTruckId(), orgId).orElse(Truck.builder()
+                    .internalNumber(enqueueForm.getInternalNumber())
+                    .number(enqueueForm.getNumber())
+                    .build());
     }
 
     @Override

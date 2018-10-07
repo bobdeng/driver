@@ -16,7 +16,7 @@ public class TransferController {
     /**
      * 交班功能
      */
-    @GetMapping("/transfer")
+    @PostMapping("/transfer")
     public CommonResponse transfer(@RequestAttribute("user") UserDTO user, @RequestBody TransferForm transferForm) {
         transferFacade.transfer(user, transferForm.getOrgId(), transferForm.getMobile());
         return CommonResponse.getSuccess("");

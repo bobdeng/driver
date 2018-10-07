@@ -15,6 +15,7 @@ public class WebConfig {
         registration.setFilter(loginFilter);
         registration.addUrlPatterns("/lineup/*");
         registration.addUrlPatterns("/message/*");
+        registration.addUrlPatterns("/transfer/*");
         registration.setName("testFilter");
         registration.setOrder(1);
         return registration;

@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/transfer")
+@RestController
+@RequestMapping("/transfer")
 public class TransferController {
     @Autowired
     TransferFacade transferFacade;
